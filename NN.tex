@@ -1,0 +1,36 @@
+% !TEX root = Main.tex
+\section{Neural Networks}
+$F^\sigma:\mathbb{R}^n \rightarrow \mathbb{R}^m, F_j^\sigma(x) = \sigma(w_j^\top x)$ for $j=1,..,m$\\
+\textbf{Activation fuctions}: logistic function $\sigma(x)=\frac{1}{1+e^{-x}}$, $\sigma'(x)=\sigma(x)(1-\sigma(x))$, ReLu $\phi(z)=max(0,z)$ \\
+\textbf{Output layer}: linear regression: $\hat{\mathbf{y}} = \mathbf{W}^L\mathbf{x}^{L-1}$\\
+binary classification (logistic):\\
+$\hat{y_1} = \text{P}[Y=1|\mathbf{x}] = \frac{1}{1 + \exp[-\langle \mathbf{w}_1^L,\mathbf{x}^{L-1}\rangle]}$\\
+multiclass (soft-max):\\
+$\hat{y_k} = \text{P}[Y=k|\mathbf{x}]= \frac{\exp[\langle \mathbf{w}_k^L,\mathbf{x}^{L-1}\rangle]}{\sum_{m=1}^{K}{\exp[\langle \mathbf{w}_m^L, \mathbf{x}^{L-1}\rangle]}}$.\\
+\textbf{Loss function} squared loss: $\frac{1}{2}(y - \hat{y})^2$\\
+cross-entropy loss: $-y \log \hat{y} - (1-y)\log(1-\hat{y})$.\\
+\textbf{Regularization}: add $l_2$-regularizer to objective or add drop-out layers. \\
+\textbf{Units and Layers}: layer-to-layer fwd. prop. notation: $\mathbf{x}^{(l)} = \sigma^{(l)}\left(\mathbb{W}^{\left(l\right)}\mathbf{x}^{\left(l-1\right)}\right)$ 
+where $y = x^{(L)}$ is the output activation vector.
+
+\subsection*{Backpropagation}
+\textbullet Use SGD to optimize over weights: $\theta \leftarrow \theta - \eta \nabla_\theta l(y_t;y(x_t;\theta))$ for $t=\{1,..,T\}$
+\textbullet We want to know $\partial l / \partial w_{ij}^{(l')} $ i.e how does changing weights affect the loss.
+\textbullet three steps: 
+\begin{inparaenum}[\color{red} 1.] 
+    \item how does output $y$ affect loss 
+    \item how do activities of units affect each other resp. $y$. 
+    \item how do weights affect activities of units. 
+\end{inparaenum}
+\textbullet 
+\begin{inparaenum}[\color{red} 1.]
+\item $\nabla_yl=\frac{\partial}{\partial y}l(y^*,y)=..$ 
+\item $\frac{\partial\mathbf{x}^{(l)}}{\partial\mathbf{x}^{(l-n)}} = \mathbf{J}^{(l)}\cdot\frac{\partial\mathbf{x}^{(l-1)}}{\partial\mathbf{x}^{(l-n)}}=\mathbf{J}^{(l)}\cdot\mathbf{J}^{(l-1)}\cdots\mathbf{J}^{(l-n+1)}$ 
+where $\mathbf{x}$ = prev. layer activation, $\mathbf{x^+}$ = next layer activation. Jacobian matrix $\mathbf{J}$ = $J_{ij}$ of mapping $\mathbf{x}\rightarrow\mathbf{x^+}$, $\mathbf{x_i^+} = \sigma(\mathbf{w}_i^\top\mathbf{x})$, $J_{ij} = \frac{\partial \mathbf{x_i^+}}{\partial \mathbf{x}_j} = w_{ij}\cdot\sigma'(\mathbf{w}_i^\top\mathbf{x})$. 
+\item $\frac{\partial x_i^+}{\partial w_{ij}} = \sigma'(w_i^\top x)x_j$ 
+\end{inparaenum}
+
+\textbullet Perform forward pass to compute activities for all units. Compute gradient of objective wrt output layer activites. Propagate gradient info back from output to inputs. Compute local gradients of activities wrt weights.  
+\subsection*{Convolutional Neural Networks}
+\textbullet \textbf{Convolution step}: primary purpose is to extract features from the input image. Parameter/weight sharing = a kernel is used on multiple locations of the image with the same weights. Sparse interactions = by making kernel smaller than input. Discrete convolution operator $s[i,j]=(I*K)[i,j] = \sum_m \sum_n I[m,n]K[i-m,j-n]$ where I is the image and K the kernel. Note that arguments are commutative. \\
+\textbullet \textbf{Pooling step}: reduce dim of each feature map e.g by max, sum, average over a predefined spatial neighborhood. Why? Scale invariant representation of image, less params/less overfitting. 

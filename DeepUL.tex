@@ -1,0 +1,17 @@
+\section{Deep Unsupervised Learning}
+\subsection*{Autoencoders}
+learn low-dim representation $z \in \mathbb{R}^d$ for given data. 
+Linear autoencoder with weights $C \in \mathbb{R}^{dxm}$ (encoder) and $D \in \mathbb{R}^{mxd}$ (decoder). objective min $\frac{1}{2n} \sum_{i=1}^n \|x_i-DCx_i \|^2$. Frobenius norm optimal approx (in this case) via SVD $X^\top X=U\Sigma V^\top$ then $C^*=U_d^\top$ and $D^*=U_d$ (first $d$ columns of $U$).
+\subsection*{Variational Autoencoders (VAEs)}
+Put a gaussian prior on distribution of continous latent vector z: $p(z_l) \sim \mathcal{N}(\mu_l, \Sigma_l)$ for $l \in \{1,..L\}$. This allows to easily generate new data points. \\
+\textbf{log-likelihood}: $\log p_\theta(x) = \log \int p_\theta (x|z) p(z) dz \geq E_q[\log p_\theta(x|z)] + E_q[\log \frac{p(z)}{q(z)}]$ where $-D_{KL}(q||p) = E_q[\log \frac{p(z)}{q(z)}]$. KL-divergence tells how much two distributions diverge. Optimal $q(z)=p(z|x)$. \\
+\textbf{NN approach}: 
+\begin{inparaenum}[\color{red} 1.]
+\item recognition/inference model: learns variational distribution $q(z)$ i.e given $x$ it returns params of normal distribution $(\mu_l,\Sigma_l)$ for $l=1,..,L$ from which we than can sample the $z_l$'s. 
+\item generative model: implements $p_\theta(x|z)$ and deterministically maps $z$ to $x$ (reconstruction). 
+\end{inparaenum}
+\subsection*{Autoregressive Models}
+generate output one variable at a time based on chain rule $p(x_{1:m}) = \Pi_{i=1}^m p(x_t|x_{1:t-1})$. \\
+\textbf{PixelCNN}: $nxn$ image with pixels $x_1,..,x_{n^2}$. Generate pixel $x_i$ by conditioning on previously generated pixels $x_1,..,x_{i-1}$. Use a masking filter for implem. \\
+\textbf{RNN}:observed sequence $x_1,..,x_T$ and corresponding labels $y_1,..,y_T$. Use feedbackloop $h_t=f(h_{t-1},x_t)$ with hidden state $h_t$. LSTM units to avoid vanishing gradient problem. \\
+\textbf{PixelRNN}: use RNN for mapping $x_1,..x_{i-1}$ to $x_i$. Row LSTM: convolute along each row from top to bottom (triangular receptive field i.e loss of context). Diagonal BiLSTM: convolute along the diagonal (receptive field includes all previously generated pixels).

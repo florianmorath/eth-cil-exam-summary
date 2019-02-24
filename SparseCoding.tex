@@ -1,0 +1,51 @@
+\section{Sparse Coding}
+
+\subsection*{Orthogonal Basis}
+For $x$ and orthogonal $U = (u_1|..|u_{D}) \in \mathbb{R}^{DxD}$. 
+Encoding $\mathbf{z = U^\top x}$. 
+Decoding $\mathbf{x = U z = UU^\top x  = x }$.
+Tresholding $ \mathbf{\hat{x}} = \mathbf{U\hat{z}}$, $\hat{z}_i = z_i$ if $ \lvert z_i \rvert > \epsilon$ else 0. 
+Reconstr. Error $\|\mathbf{x}-\mathbf{\hat{x}}\|^2 = \|\sum_{d\notin\sigma}\langle\mathbf{x},\mathbf{u}_d\rangle \mathbf{u_d} \|^2 =  \sum_{d\notin\sigma}\langle\mathbf{x},\mathbf{u}_d\rangle ^2$. Proof: $\|\sum x_i \|^2 = \sum \|x_i \|^2$ if $x_i$ orthogonal. Advantages: efficient inverse, energy/length preservation. \\
+\textbf{Haar wavelets:} \\
+scaling: $[1,1,1,1]$, mother wavelet: $[1,1,-1,-1]$, dilated: $[1,-1,0,0]$, translated: $[0,0,1,-1]$.
+
+\textbf{Fourier vs Wavelets:}\\
+\textbullet Fourier: good for periodic signals, global support, no time info/only frequencies themselves. \\
+\textbullet Wavelets: good for localized signals like abrupt changes/irregularities, represents a signal in time and frequency domain. 
+
+\subsection*{Overcomplete Basis}
+$\mathbf{U} \in \mathbb{R}^{D \times  L}$ for \# atoms $ = L > D = \mathsf{dim}\text{(data)}$. $x \in \mathbb{R}^D, z \in \mathbb{R}^L$ because $Uz=x$.
+Encoding ill-posed problem $\rightarrow$ add constraint $\mathbf{z}^\star \in \argmin_\mathbf{z} \lVert \mathbf{z} \rVert_0$ s.t. $\mathbf{x} = \mathbf{Uz}$. NP-hard and non-convex \\ $\rightarrow$ approx with Basis pursuit i.e relax to 1-norm (convex) or with Matching Pursuit.
+
+\textbf{Coherence} \\
+$m(\mathbf{U}) = \max_{i,j:\, i \neq j} | \mathbf{u}_i^\top \mathbf{u}_j |$ \\
+\textbf{Matching Pursuit (MP)}
+a greedy approximation algorithm.
+Objective: $\mathbf{z}^\star \in \argmin_{\mathbf{z}} \|\mathbf{x} - \mathbf{Uz} \|_2$, s.t. $\|\mathbf{z}\|_0 \leq K$
+\begin{inparaenum}[\color{red}1.]
+	\item init: $z \leftarrow 0, r \leftarrow x$
+	\item while $\|\mathbf{z}\|_0 < K$ do
+	\item select atom with max correlation $d^\star = \argmax_d |\langle \mathbf{u}_d, \mathbf{r} \rangle|$
+	\item update coefficients: $z_{d^\star} \leftarrow z_{d^\star} + \langle \mathbf{u}_{d^\star}, \mathbf{r} \rangle$
+	\item update residual: $\mathbf{r} \leftarrow \mathbf{r} - \langle \mathbf{u}_{d^\star}, \mathbf{r} \rangle \mathbf{u}_{d^\star}$.
+\end{inparaenum}
+
+\textbf{Compressive Sensing}: Compress data while gathering:
+\begin{inparaitem}[\color{red}\textbullet]
+  \item $\mathbf{x} \in \mathbb{R}^D$, $K$-sparse in o.n.b. $\mathbf{U}$. $\mathbf{y} \in \mathbb{R}^M$ corresponds to $M$ lin. combinations/measurements of signal; $\mathbf{y} = \mathbf{Wx} = \mathbf{WUz} = \mathbf{\theta z}$, $\theta \in \mathbb{R}^{M \times D}$
+  \item Reconstruct $\mathbf{x} \in \mathbb{R}^D$ from $\mathbf{y}$; find $\mathbf{z}^\star \in \argmin_{\mathbf{z}}\|\mathbf{z}\|_0$, s.t. $\mathbf{y} = \mathbf{\theta z}$ (e.g. with MP). Given $\mathbf{z}$, reconstruct $\mathbf{x}$ via $\mathbf{x} = \mathbf{Uz}$
+\end{inparaitem}
+\\Sufficient conditions:
+\begin{inparaitem}[\color{red}\textbullet]
+  \item $\mathbf{W} = $ Gaussian random projection, i.e. $w_{ij}\sim\mathcal{N}(0, \frac{1}{D})$
+  \item M $\geq cK log(\frac{D}{K})$, where $c$ is some constant
+\end{inparaitem}
+
+\subsection*{Dictionary Learning}
+Adapt the dictionary to signal characteristics. Objective: $(\mathbf{U}^\star, \mathbf{Z}^\star) \in \argmin_\mathbf{U,Z} \| \mathbf{X} - \mathbf{U} \cdot \mathbf{Z} \|_F^2$ \\
+\textbf{K-SVD (Iter Greedy Minimization):}
+\begin{inparaenum}[\color{red} 1.]
+  \item Coding step: $\mathbf{Z}^{t+1} \in \argmin_\mathbf{Z} \| \mathbf{X} - \mathbf{U}^t \mathbf{Z} \|_F^2 = \sum_{i=1}^N \|x_i-U^tz_i \|^2$ s.t $\|z_i\|_0 \leq K$. Use any pursuit algorithm.
+  \item Dict update step: $\mathbf{U}^{t+1} \in \argmin_\mathbf{U} \| \mathbf{X} - \mathbf{UZ}^{t+1} \|_F^2$, s.t $\forall l\in [L]:\|\mathbf{u}_l\|_2 = 1$. 
+   idea: update one atom $u_l$ at a time. $\min_{u_l}\|\mathbf{X} - \mathbf{U}\mathbf{Z}\|_F^2 = \min_{u_l}\|X-(\sum_{e \neq l}u_ez_e^\top + u_lz_l^\top)\|_F^2= \min_{u_l}\|\mathbf{R}_l - \mathbf{u}_l(\mathbf{z}_l)^\top\|_F^2$ where $z_l$ is the $l$-th row of matrix $Z$ and $R_l$ is the residual due to atom $u_l$. Use SVD $\mathbf{R}_l = \sum_i \sigma_i \tilde{u}_i \tilde{v}_i^\top$ then $\mathbf{u}^*_l=\tilde{\mathbf{u}}_1$ and $\mathbf{z}^*_l=\tilde{\mathbf{v}}_1$ (use power iteration for efficiency).
+\end{inparaenum}

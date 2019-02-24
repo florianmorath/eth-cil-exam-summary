@@ -1,0 +1,10 @@
+% -*- root: Main.tex -*-
+\section{SVD}
+$\mathbf{A} = \mathbf{U} \mathbf{D} \mathbf{V}^\top = \sum_{i=1}^{s=min\{m,n\}} \sigma_i u_i (v_i)^\top$\\
+$\mathbf{A} \in \mathbb{R}^{m \times n}, \mathbf{U} \in \mathbb{R}^{m \times m}, \mathbf{D} \in \mathbb{R}^{m \times n}, \mathbf{V} \in \mathbb{R}^{n \times n}$\\
+$\mathbf{U,V}$ orthogonal, $D=diag(\sigma_1,...,\sigma_s), \sigma_1 \geq ... \geq \sigma_s \geq 0$. Rank($\mathbf{A})=$\#non-zero singular values.
+
+\subsection*{Eckart-Young Theorem}
+$\min_{rank(B)=K} ||A-B||_F^2 = ||A-A_k||_F^2 = \sum_{r=k+1}^{rank(A)} \sigma_r^2$ \\
+note: use $Tr(A^\top A)$ def of F-norm to prove.
+$\min_{rank(B)=K} ||A-B||_2 = ||A-A_k||_2 = \sigma_{k+1}$

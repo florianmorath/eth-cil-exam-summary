@@ -1,0 +1,22 @@
+% !TEX root = Main.tex
+\section{Word Embeddings}
+\textbf{Skip-gram model:}\\
+$p_\theta(w|w')$ = Pr[$w$ occurs in context of $w'$]\\
+\textbf{Log-likelihood:}\\
+$L(\theta; \mathbf{w}) = \sum_{t=1}^T\sum_{\Delta \in I}{\log p_\theta(w^{(t+\Delta)}|w^{(t)})}$\\
+\textbf{Latent Vector Model:} $w \rightarrow (\mathbf{x}_w, b_w) \in \mathbb{R}^{D+1} \\p_{\theta}(w|w') = \frac{\exp[\langle \mathbf{x}_w,\mathbf{x}_{w'}\rangle + b_w]}{\sum_{v\in V}{\exp[\langle \mathbf{x}_v,\mathbf{x}_{w'}\rangle + b_v ]}}$ (soft-max).\\
+\textbf{- add context embeddings:} more flexibility\\
+$\log p_{\theta}(w|w') = \langle x_{w'}, y_{w} \rangle + b_w$,  word embeddings $y_w$, context embeddings $x_{w'}$.\\
+\textbf{- negative sampling (logistic classification):} avoids having to compute normalization Z \\
+$\sum_{(i,j) \in \Delta^+}\log\sigma(x_i^\top y_j) + \sum_{(i,j) \in \Delta^-}\log\sigma(-x_i^\top y_j>)$
+
+\subsection*{GloVe}
+\textbf{Co-occurence Matrix:}\\
+$\mathbf{N} = (n_{ij}) \in \mathbb{R}^{|V|\times|C|} = \#$ of word $w_i$ in context $w_j$\\
+\textbf{Objective: (Weighted Square Loss)} $H(\theta;\mathbf{N})$\\
+$= \sum_{n_{ij} > 0} f(n_{ij})(\log n_{ij} - \log \tilde{p}_\theta(w_i|w_j))^2$\\
+with $\tilde{p}_\theta(w_i|w_j) = \exp[\langle \mathbf{x}_i, \mathbf{y}_j \rangle + b_i + c_j]$ unnormalized! and $f(n) = \min\{1, (\frac{n}{n_{max}})^\alpha\}$, $\alpha \in (0;1]$.\\
+1. sample $(i,j)$ u.a.r, s.t. $n_{ij}>0$\\
+2. $\mathbf{x}_i^{new} \leftarrow \mathbf{x}_i + 2\eta f(n_{ij})(\log n_{ij} - \langle \mathbf{x}_i, \mathbf{y}_j \rangle)\mathbf{y}_j$\\
+3. $\mathbf{y}_j^{new} \leftarrow \mathbf{y}_j + 2\eta f(n_{ij})(\log n_{ij} - \langle \mathbf{x}_i, \mathbf{y}_j \rangle)\mathbf{x}_i$
+

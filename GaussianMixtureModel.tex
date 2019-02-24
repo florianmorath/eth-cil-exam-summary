@@ -1,0 +1,30 @@
+% !TEX root = Main.tex
+\section{Gaussian Mixture Models (GMM)}
+let $\boldsymbol{\theta}_k = (\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)$, $p(\mathbf{x};\theta_k) = \mathcal{N}(\mathbf{x} | \boldsymbol{\mu}_k, \Sigma_k)$\\
+\textbf{Mixture Models:} $p_\theta(\mathbf{x}) = \sum_{k=1}^K \pi_k p(\mathbf{x};\theta_k)$\\
+1. sample cluster index $j \sim Categorical(\pi)$\\
+2. given $j$, sample data $x \sim \text{Normal}(\mu_j, \Sigma_j)$ \\
+\textbf{Latent variables:} data point $x_i$ belongs to cluster $z_i$. $p(z_i=j)=\pi_j$ \\
+\textbf{Max. Likelihood Estimation (MLE):}\\
+$\argmax_\theta\sum_{n=1}^N \log \left( \sum_{k=1}^K \pi_k p(\mathbf{x}_n;\theta_k)\right)\\
+\ge \sum_{n=1}^N \sum_{k=1}^K{q_{k,n}[\log p(\mathbf{x}_n;\theta_k) + \log \pi_k - \log q_{k,n}]}$\\
+
+\subsection*{Expectation-Maximization (EM) for GMM}
+\textbf{E-Step: (posterior over latent variables)}\\
+$q_{k,n}^* = \operatorname{Pr}(z_n=k|x_n) = \frac{1}{Z}p(z_n=k)p(x_n|z_n=k) = \frac{\boldsymbol{\pi}_k p(x_n;\theta_k)}{\sum_{l=1}^K \boldsymbol{\pi}_l p(x_n;\theta_l)}$ \\
+\textbf{M-Step: } $\boldsymbol{\mu}_k^* := \frac{\sum_{n=1}^N q_{k,n} \mathbf{x}_n}{\sum_{n=1}^N q_{k,n}}$
+$, \boldsymbol{\pi}_k^* := \frac{1}{N} \sum_{n=1}^N q_{k,n}$\\
+$\Sigma_k^* = \frac{\sum_{n=1}^N q_{k, n} (\mathbf{x}_n - \boldsymbol{\mu}_k)(\mathbf{x}_n - \boldsymbol{\mu}_k)^\top}{\sum_{n=1}^N q_{k,n}}$
+
+\subsection*{Gaussian distribution}
+Standard deviation $\sigma$, Mean $\mu$ \\
+$p(x;\mu, \sigma) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{- \frac{1}{2} \frac{(x-\mu)^2}{\sigma^2}}$\\
+Covariance matrix $\Sigma$, Mean $\mu$ \\
+$p(x;\mu, \Sigma) = \frac{1}{(2\pi)^{D/2} |\Sigma|^{1/2}} e^{- \frac{1}{2} (x-\mu)^T \Sigma^{-1} (x-\mu)}$
+
+\subsection*{Model Order Selection (AIC / BIC for GMM)}
+Trade-off between data fit (i.e. likelihood $p(\mathbf{X} | \theta)$) and complexity (i.e. \# of free parameters $\kappa(\cdot)$). For choosing $K$:\\
+\textbf{Akaike Information Criterion}: $\operatorname{AIC}(\theta | \mathbf{X}) = -\log p_\theta(\mathbf{X}) + \kappa(\theta)$\\
+\textbf{Bayesian Information Criterion}: $\operatorname{BIC}(\theta | \mathbf{X}) = -\log p_\theta(\mathbf{X}) + \frac{1}{2} \kappa(\theta) \log N$\\
+\# of free params for GMM: $\kappa(\theta) = KD + K\frac{D(D+1)}{2} + (K - 1)$.\\
+

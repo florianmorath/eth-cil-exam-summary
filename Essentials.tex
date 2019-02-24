@@ -1,0 +1,57 @@
+% -*- root: Main.tex -*-
+\section{Essentials}
+\subsection*{Derivatives}
+$\frac{\partial}{\partial \mathbf{x}}(\mathbf{a}^\top \mathbf{x}) = \mathbf{a}$ \quad
+$\frac{\partial}{\partial \mathbf{x}}(\mathbf{A} \mathbf{x}) = \mathbf{A}^\top$ \quad
+$\frac{\partial}{\partial \mathbf{x}}(\mathbf{x}^\top \mathbf{A}) = \mathbf{A}$ \quad
+$\frac{\partial}{\partial \mathbf{x}}(\mathbf{x}^\top \mathbf{x}) = 2\mathbf{x}$ \quad
+$\frac{\partial}{\partial \mathbf{x}}(\mathbf{x}^\top \mathbf{A}\mathbf{x}) = (\mathbf{A} + \mathbf{A}^\top)\mathbf{x}$ \\
+$\frac{\partial}{\partial \mathbf{X}}(\mathbf{c}^\top \mathbf{X} \mathbf{b}) = \mathbf{c}\mathbf{b}^\top$ \quad
+$\frac{\partial}{\partial \mathbf{X}}(\mathbf{c}^\top \mathbf{X}^\top \mathbf{b}) = \mathbf{b}\mathbf{c}^\top$ \\
+$\frac{\partial}{\partial \mathbf{X}}(\|\mathbf{X}\|_F^2) = 2\mathbf{X}$ \quad
+$\frac{\partial}{\partial \mathbf{X}}(log(det(\mathbf{X}))) = \mathbf{(X^\top)^{-1}}$\\
+$\frac{\partial}{\partial \mathbf{a}}(\mathbf{(x-a)^\top W(x-a)}) = -2\mathbf{W(x-a)}$ \\
+$\frac{\partial}{\partial \mathbf{X}}(\mathbf{a^\top X^{-1}b}) = \mathbf{-(X^\top)^{-1}ab^\top(X^\top)^{-1}}$ \\
+$\frac{\partial}{\partial \mathbf{X}}(Tr(\mathbf{AX})) = \frac{\partial}{\partial \mathbf{X}}(Tr(\mathbf{XA})) = \mathbf{A^\top}$ \\
+$\frac{\partial}{\partial \mathbf{X}}(Tr(\mathbf{AX^\top})) = \frac{\partial}{\partial \mathbf{X}}(Tr(\mathbf{X^\top A})) = \mathbf{A}$ \\
+$\frac{\partial}{\partial \mathbf{X}}(Tr(\mathbf{X^\top AX})) = \mathbf{(A+A^\top)X}$ \\ 
+
+\subsection*{Jacobian}
+$J_F= \begin{bmatrix} \nabla_x^\top F_1\\...\\\nabla_x^\top F_m\end{bmatrix}$ where $F:\mathbb{R}^n \rightarrow \mathbb{R}^m$ for $x \in \mathbb{R}^n$
+
+\subsection*{LinAlg}
+$\bullet$ A is \textbf{psd} if $v^\top Av \geq 0$, note: if $A=B^\top B$ then $A$ is psd, psd $\Leftrightarrow \lambda \geq 0$ \\
+$\bullet$ \textbf{orthogonal matrix}: $U^\top U = UU^\top = \mathbb{1}$ \\
+1.unit length columns/rows 2.orthogonal columns/rows 3. square matrix \\
+properties: preserve norm $\|Ux\|_2^2 = \|x\|_2^2$, $det(U) = \pm1$, full rank because invertible.\\
+$\bullet$ $\langle \mathbf{x}, \mathbf{y} \rangle = \|\mathbf{x}\|_2 \cdot \|\mathbf{y}\|_2 \cdot \cos(\theta)$ \\
+$\bullet$ \textbf{spectral theorem}: Matrix $A$ is diagonalizable by orthogonal matrix iff $A$ is symmetric. \\
+$\bullet$ $A$ is degenerate/non-invertible $\Leftrightarrow det(A)=0$. \\
+$\bullet$ \textbf{rank-nullity theorem}: $dim(kernel(A))+dim(range(A)) = n$ where $n$ is input dimension.
+$\bullet$ \textbf{determinant}: $det(diag(a_1,...,a_n))=a_1*...*a_n$ \quad $det(\begin{bmatrix}a & b \\c&d\end{bmatrix})=ad-bc$ \\
+$\bullet$ \textbf{cauchy-schwarz}: $x^\top y \leq \|x\|_2 \|y\|_2$ \\
+$\bullet$ \textbf{trace} of a matrix is equal to the sum of its eigenvalues. Trace operator is linear and cyclic. \\
+$\bullet$ eigenvectors corresponding to distinct eigenvalues of a symmetric matrix are orthogonal to each other. \\
+$\bullet$ a function is convex iff its Hessian $\nabla^2$ is psd.\\
+$\bullet$ $f$ convex $\Leftrightarrow \forall \lambda \in [0,1], x,y \in X. f(\lambda x + (1- \lambda)y) \leq \lambda f(x) + (1 - \lambda) f(y)$\\
+$\bullet$ \textbf{jensens inequality}: $E[f(X)] \geq f(E[X])$ for $f$ convex ($\leq$ for $f$ concave). \\
+
+\subsection*{Eigendecomposition}
+$\Sigma = U\Lambda U^\top$ where $\Lambda=diag(\lambda_1,...,\lambda_m)$ with eigenvalues $\lambda_1 \geq...\geq\lambda_m$, $U=(u_1|...|u_m)$ eigenvectors orthogonal. Only exists if $\Sigma$ is symmetric.
+
+\subsection*{Eigenvalue / -vectors}
+Eigenvalue Problem: $\mathbf{Ax} = \lambda \mathbf{x}$\\
+1. solve $\operatorname{det}(\mathbf{A} - \lambda \mathbb{1}) \overset{!}{=} 0$ resulting in $\{\lambda_i\}_i$\\
+2. $\forall \lambda_i$:
+solve $(\mathbf{A} - \lambda_i \mathbb{1}) \mathbf{x}_i = \mathbf{0}$, for $\mathbf{x}_i$.
+
+\subsection*{Norms}
+$\|\mathbf{A}\|_F =\allowbreak \sqrt{\sum_{i=1}^{m} \sum_{j=1}^{n}\mathbf{a}_{i,j}^2} = \sqrt{trace(A^\top A)} = \sqrt{trace(AA^\top)} =\allowbreak \sqrt{\sum_{i=1}^{\min\{m, n\}} \sigma_i^2}$\\
+$\|\mathbf{A}\|_2 = sup\{\|Ax\|: \|x\|=1\} = \sigma_1$ \\
+$\|\mathbf{M}\|_\star = \sum_{i=1}^{\min(m, n)} \sigma_i$
+
+\subsection*{Probability / Statistics}
+\begin{inparaitem}
+	\item $Var(X)=E[(X-\mu)^2]$
+	\item sample variance: $\frac{1}{N}\sum_{i=1}^{N}(x_i-\bar{x})^2$
+\end{inparaitem}

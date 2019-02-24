@@ -1,0 +1,9 @@
+% !TEX root = Main.tex
+\section{K-means Algorithm}
+Hard assignments $Z \in \{0,1\}^{NxK}$, Centroids $U = (u_1|..|u_K) \in \mathbb{R}^{DxK}$, data $X \in \mathbb{R}^{DxN}$ \\
+\textbf{Target:} $\min_{\mathbf{U}, \mathbf{Z}} J(\mathbf{U}, \mathbf{Z}) = \|\mathbf{X} - \mathbf{U} \mathbf{Z^\top}\|_F^2$\\
+$= \sum_{n=1}^N \sum_{k=1}^K \mathbf{z}_{n,k} \|\mathbf{x}_n - \mathbf{u}_k\|_2^2$\\
+1. \textbf{Assign} data points to closest centroid: $k^*(\mathbf{x}_n) = \argmin_k \{ \|\mathbf{x}_n - \mathbf{u}_k\|_2 \}$. Set $\mathbf{z}_{k^*,n} = 1$, and for $ l \neq k^*~ \mathbf{z}_{l,n}=0$.\\
+2. \textbf{Update} centroids: $\mathbf{u}_k = \frac{\sum_{n=1}^N z_{n,k} \mathbf{x}_n}{\sum_{n=1}^N z_{n,k}}$.\\
+3. Repeat until Z doesn't change anymore.\\
+Computational cost: $O(K\cdot N \cdot D)$

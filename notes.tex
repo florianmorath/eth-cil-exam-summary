@@ -1,0 +1,14 @@
+% -*- root: Main.tex -*-
+\section{Notes}
+\textbullet Proof that eigenvectors of symmetric matrix are orthogonal: $\lambda \langle x,y \rangle = \langle \lambda x,y \rangle = \langle Ax,y \rangle = \langle x,A^\top y \rangle = \langle x,A y \rangle = \langle x,\mu y \rangle = \mu \langle x,y \rangle \Rightarrow (\lambda-\mu)\langle x,y\rangle=0$ where $\lambda \neq \mu$.\\
+\textbullet K-means vs GMM: k-means has hard assignments, cheaper to train (less params). GMM has soft assginments, more expressive because cluster is described by a MVN i.e shape is defined by an arbitrary covariance martix and not restricted to spherical clusters. GMM is generative model i.e we can do outlier detection, generate data points, uncertainty estimation. \\
+\textbullet SVD and PCA: if $A=UDV^\top$. Columns of $U$ are eigenvectors of $AA^\top$. Columns of $V$ are eigenvectors of $A^\top A$. Eigenvalues of $A^\top A$ and $AA^\top$ are singular values$^2$ of $A$. \\
+\textbullet orthogonal Haar Basis for $4$-dim signals: \\
+$U = \frac{1}{2}
+\begin{bmatrix}
+    1 & 1 & \sqrt{2} & 0 \\
+    1 & 1 & -\sqrt{2} & 0 \\
+    1 & -1 & 0 & \sqrt{2} \\
+    1 & -1 & 0 & -\sqrt{2}
+\end{bmatrix}
+$

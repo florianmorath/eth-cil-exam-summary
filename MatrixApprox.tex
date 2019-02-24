@@ -1,0 +1,11 @@
+% !TEX root = Main.tex
+\section{Matrix Approximation \& Reconstruction}
+problem of SVD is unobserved entries. Want to only consider I = observed entries. \\
+$min_{rank(B)=k}[\sum_{(i,j) \in I}(a_{ij} - b_{ij})^2]$
+\subsection*{Convex Relaxation}
+\textbullet $rank(B) \geq \|B\|_*$ for $\|B\|_2 \leq 1$. proof: $rank(B)=\#\{\sigma_i >0\}=\sum_{i:\sigma_i>0}1 \geq \sum_{i:\sigma_i>0}\sigma_i = \|B\|_*$ since $\sigma_1 = \|B\|_2  \leq 1$. Thus $Q_k = \{B:rank(B) \leq k\} \subseteq P_k = \{B:\|B\|_* \leq k\}$ a convex relaxation (in fact convex hull). \textbullet
+Singular Value Tresholding: if $A=UDV^\top$ then $shrink_\tau(A)=UD_\tau V^\top$ where $D_\tau=diag(max\{0,\sigma_i-\tau\})$. $B_{t+1}=B_t+\eta_t\pi(A-shrink_\tau(B_t))$ where $\pi$ zeros out unobserved entries.
+
+\subsection*{Alternating Least Squares}
+reparametrize $B=UV$ where $U \in \mathbb{R}^{mxk}, V \in \mathbb{R}^{kxn}$. If we have product of two matrices, rank cannot be bigger than smallest rank occuring in it. $min[\sum_{(i,j) \in I}(a_{ij} - u_i^\top v_j)^2]$. ALS = optimize over $u_i$'s while keeping $v_j$'s fixed and vice versa.
+

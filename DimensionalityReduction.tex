@@ -1,0 +1,27 @@
+% -*- root: Main.tex -*-
+\section{Principle Component Analysis}
+$\mathbf{X} \in \mathbb{R}^{D \times N}$. $N$ observations.\\
+1. Empirical Mean: $\overline{\mathbf{x}} = \frac{1}{N} \sum_{n=1}^N \mathbf{x}_n$.\\
+2. Center Data: $\overline{\mathbf{X}} = \mathbf{X} - [\overline{\mathbf{x}}, \ldots, \overline{\mathbf{x}}] = \mathbf{X} - \mathbf{M}$.\\
+3. Cov.: $\boldsymbol{\Sigma} = \frac{1}{N	} \sum_{n=1}^N (\mathbf{x}_n - \overline{\mathbf{x}}) (\mathbf{x}_n - \overline{\mathbf{x}})^\top = \frac{1}{N} \overline{\mathbf{X}}\overline{\mathbf{X}}^\top$.\\
+4. Eigenvalue Decomposition: $\boldsymbol{\Sigma} = \mathbf{U} \boldsymbol{\Lambda} \mathbf{U}^\top$.\\
+5. Select $K < D$, only keep $\mathbf{U}_K = [u_1,...,u_{K}]$.\\
+6. Transform data onto new Basis: $\overline{\mathbf{Z}}_K = \mathbf{U}_K^\top \overline{\mathbf{X}}$.\\
+7. Reconstruct to original Basis: $\tilde{\overline{\mathbf{X}}} = \mathbf{U}_k \overline{\mathbf{Z}}_K$.\\
+8. Reverse centering: $\tilde{\mathbf{X}} = \tilde{\overline{\mathbf{X}}} + \mathbf{M}$.\\
+For compression save $\mathbf{U}_k, \overline{\mathbf{Z}}_K, \overline{\mathbf{x}}$.\\
+$\mathbf{U}_k \in \mathbb{R}^{D \times K}, \boldsymbol{\Sigma} \in \mathbb{R}^{D \times D}, \overline{\mathbf{Z}}_K \in \mathbb{R}^{K \times N}, \overline{\mathbf{X}} \in \mathbb{R}^{D \times N}$ \\
+$\bullet$ Reconstruction error = sum of discarded eigenvalues. \\
+$\bullet$ The transformed dataset $\overline{\mathbf{Z}}_K$ has diagonal covariance matrix.
+
+\subsection*{Iterative View}
+Residuals $r_i = x_i - \tilde{x}_i = (\mathbb{1} - uu^T)x_i$\\
+Cov. matrix of residuals: $\frac{1}{n} \sum_{i=1}^n r_ir_i^\top = \frac{1}{n} \sum_{i=1}^n (\mathbb{1}-uu^T)x_i x_i^T (\mathbb{1}-uu^T)^T = ... = \Sigma - \lambda uu^T$ \\
+1. Find principal eigenvector of $(\Sigma - \lambda u u^T)$\\
+2. which is the 2nd principal eigenvector of $\Sigma$\\
+3. iterating to get $d$ principal eigenvector of $\Sigma$ \\
+$\bullet$ the principal eigenvector of $\Sigma$ points in the direction with largest variance of the data ($argmax_{\|u\|=1} u^\top \Sigma u$).
+
+\subsection*{Power iteration}
+find principal eigenvector of A: $v_{t+1} = \frac{Av_t}{||Av_t||}$, $\lim_{t \rightarrow \infty} v_t = u_1$\\
+
